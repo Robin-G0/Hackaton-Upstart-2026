@@ -2,7 +2,7 @@
 
 ## Run (Docker)
 1) Ensure you have Docker + Docker Compose.
-2) Copy `.env.example` to `.env` (this scaffold also generates `.env` by default).
+2) Copy `.env.example` to `.env`.
 3) Start:
    - `docker compose up --build`
 
