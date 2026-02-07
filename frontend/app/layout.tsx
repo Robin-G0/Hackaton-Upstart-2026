@@ -1,3 +1,10 @@
+import { Space_Grotesk } from "next/font/google";
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -5,7 +12,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body style={{ fontFamily: "system-ui, sans-serif", margin: 0, padding: 24 }}>
+      <body
+        className={spaceGrotesk.className}
+        style={{ margin: 0, backgroundColor: "#ffffff", color: "#0c0f0a" }}
+      >
         {children}
       </body>
     </html>
