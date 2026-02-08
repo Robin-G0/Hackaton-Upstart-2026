@@ -247,7 +247,7 @@ export default function Page() {
                 color: "#0c0f0a",
               }}
             >
-              GreenFlow Compute
+              Verdante
             </h1>
             <p
               style={{
