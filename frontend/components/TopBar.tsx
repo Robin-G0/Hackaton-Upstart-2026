@@ -6,6 +6,7 @@ import { downloadJson, readJsonFile } from "@/lib/storage";
 import { useRouter } from "next/navigation";
 import { UIModeSwitch } from "@/components/UIModeSwitch";
 import type { UIMode } from "@/lib/uiMode";
+import Image from "next/image";
 
 export function TopBar(props: {
   state: AppState;
@@ -23,28 +24,25 @@ export function TopBar(props: {
         <div className="min-w-0">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <div className="h-9 w-9 rounded-xl bg-brand-green" />
+              <button onClick={() => router.push("/")} className="cursor-pointer hover:opacity-80 transition-opacity">
+                <Image src="/image/logo-verdante.png" alt="Verdante Logo" width={50} height={50} className="rounded-xl" />
+              </button>
               <UIModeSwitch onChange={props.onUiModeChange} />
             </div>
 
             <div className="min-w-0">
               <div className="truncate text-sm text-zinc-600">
-                {props.state.workspace.name} • Local-only MVP
+                {props.state.workspace.name}
               </div>
               <div className="truncate text-base font-semibold text-black">
-                Carbon-Aware Cloud Computing {props.titleRight ? `— ${props.titleRight}` : ""}
+                {props.titleRight || ""}
               </div>
             </div>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center justify-end gap-2">
-          <button
-            onClick={() => downloadJson("carbon-aware-export.json", props.state)}
-            className="rounded-xl border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50"
-          >
-            Export JSON
-          </button>
+          
 
           <input
             ref={fileRef}
@@ -64,12 +62,7 @@ export function TopBar(props: {
               router.push("/dashboard");
             }}
           />
-          <button
-            onClick={() => fileRef.current?.click()}
-            className="rounded-xl border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50"
-          >
-            Import JSON
-          </button>
+        
 
           <button
             onClick={props.onCreateProject}

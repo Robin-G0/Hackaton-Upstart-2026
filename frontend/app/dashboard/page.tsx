@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { TopBar } from "@/components/TopBar";
 import type { AppState, Project } from "@/lib/types";
 import { loadState, saveState, uid } from "@/lib/storage";
@@ -111,7 +112,7 @@ export default function DashboardPage() {
               <div className="text-sm text-zinc-700">Workspace</div>
               <div className="mt-1 text-2xl font-semibold text-zinc-900">{state.workspace.name}</div>
               <div className="mt-2 max-w-xl text-sm text-zinc-700">
-                Tableau de bord minimal. Les détails (jobs, conformité, paramètres avancés, rapports) sont dans la page projet.
+              
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
@@ -140,7 +141,7 @@ export default function DashboardPage() {
                 >
                   Create Project
                 </button>
-                <a
+                <Link
                   href="/jobs"
                   className={cls(
                     "rounded-2xl px-4 py-2 text-sm font-semibold shadow-sm",
@@ -149,7 +150,7 @@ export default function DashboardPage() {
                   title="Open jobs page (you can also run from a specific project card)"
                 >
                   Jobs
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -162,13 +163,13 @@ export default function DashboardPage() {
               <div className="text-lg font-semibold text-zinc-900">Projects</div>
               <div className="text-sm text-zinc-700">
                 {uiMode === "LITE"
-                  ? "Vue Lite: liste minimaliste."
-                  : "Vue Full: un peu plus de contexte (sans surcharger)."}
+                  ? "Lite screen"
+                  : "Full screen"}
               </div>
             </div>
 
             <div className="rounded-2xl border border-emerald-200 bg-white/70 px-4 py-2 text-xs font-semibold text-emerald-900">
-              Tip: Run opens Jobs (demo run + PDF report)
+             
             </div>
           </div>
 
@@ -224,7 +225,7 @@ export default function DashboardPage() {
                 )}
 
                 <div className="mt-5 flex flex-wrap items-center gap-2">
-                  <a
+                  <Link
                     href={`/project?projectId=${encodeURIComponent(p.id)}`}
                     className={cls(
                       "rounded-2xl px-4 py-2 text-sm font-semibold text-white shadow-sm",
@@ -232,10 +233,10 @@ export default function DashboardPage() {
                     )}
                   >
                     Open
-                  </a>
+                  </Link>
 
                   {/* IMPORTANT: Run must open Jobs page */}
-                  <a
+                  <Link
                     href={`/jobs?projectId=${encodeURIComponent(p.id)}`}
                     className={cls(
                       "rounded-2xl px-4 py-2 text-sm font-semibold shadow-sm",
@@ -243,7 +244,7 @@ export default function DashboardPage() {
                     )}
                   >
                     Run
-                  </a>
+                  </Link>
 
                   <button
                     type="button"
