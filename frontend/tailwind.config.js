@@ -1,10 +1,19 @@
-/** @type {import('tailwindcss').Config} */
+import type { Config } from "tailwindcss";
+
 export default {
-  content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  darkMode: "class",
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        brand: {
+          green: "#2C4A36",
+          blue: "#86C5DD",
+          black: "#000000",
+          white: "#FFFFFF",
+        },
+      },
+    },
   },
   plugins: [],
-}
+} satisfies Config;

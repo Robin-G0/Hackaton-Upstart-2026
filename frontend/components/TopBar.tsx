@@ -1,0 +1,92 @@
+"use client";
+
+import { useRef } from "react";
+import { AppState } from "@/lib/types";
+import { downloadJson, readJsonFile } from "@/lib/storage";
+import { useRouter } from "next/navigation";
+
+export function TopBar(props: {
+  state: AppState;
+  setState: (s: AppState) => void;
+  titleRight?: string;
+  onCreateProject: () => void;
+}) {
+  const router = useRouter();
+  const fileRef = useRef<HTMLInputElement | null>(null);
+
+  function toggleTheme() {
+    const next = props.state.theme === "light" ? "dark" : "light";
+    const s = { ...props.state, theme: next };
+    props.setState(s);
+    document.documentElement.classList.toggle("dark", next === "dark");
+  }
+
+  return (
+    <div className="no-print sticky top-0 z-40 border-b border-zinc-200 bg-white/90 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/80">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+        <div className="min-w-0">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-xl bg-brand-green" />
+            <div className="min-w-0">
+              <div className="truncate text-sm text-zinc-600 dark:text-zinc-300">
+                {props.state.workspace.name} • Local-only MVP
+              </div>
+              <div className="truncate text-base font-semibold text-black dark:text-white">
+                Carbon-Aware Cloud Computing {props.titleRight ? `— ${props.titleRight}` : ""}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <button
+            onClick={toggleTheme}
+            className="rounded-xl border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
+          >
+            Theme
+          </button>
+
+          <button
+            onClick={() => downloadJson("carbon-aware-export.json", props.state)}
+            className="rounded-xl border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
+          >
+            Export JSON
+          </button>
+
+          <input
+            ref={fileRef}
+            type="file"
+            accept="application/json"
+            className="hidden"
+            onChange={async (e) => {
+              const f = e.target.files?.[0];
+              if (!f) return;
+              const imported = (await readJsonFile(f)) as AppState;
+              if (!imported || imported.version !== 1) {
+                alert("Invalid import file (expected version 1).");
+                return;
+              }
+              props.setState(imported);
+              document.documentElement.classList.toggle("dark", imported.theme === "dark");
+              if (fileRef.current) fileRef.current.value = "";
+              router.push("/");
+            }}
+          />
+          <button
+            onClick={() => fileRef.current?.click()}
+            className="rounded-xl border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
+          >
+            Import JSON
+          </button>
+
+          <button
+            onClick={props.onCreateProject}
+            className="rounded-xl bg-brand-green px-4 py-2 text-sm font-semibold text-white hover:opacity-95"
+          >
+            Create Project
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
