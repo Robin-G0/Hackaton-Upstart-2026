@@ -5,12 +5,14 @@ const KEY = "carbonAwareMvp:v1";
 
 export function loadState(): AppState {
   if (typeof window === "undefined") return makeSeedState();
+
   const raw = window.localStorage.getItem(KEY);
   if (!raw) {
     const seed = makeSeedState();
     window.localStorage.setItem(KEY, JSON.stringify(seed));
     return seed;
   }
+
   try {
     const parsed = JSON.parse(raw) as AppState;
     if (!parsed || parsed.version !== 1) throw new Error("bad version");

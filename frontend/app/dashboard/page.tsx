@@ -12,32 +12,22 @@ function cls(...x: Array<string | false | null | undefined>) {
 }
 
 export default function DashboardPage() {
-  // Deterministic initial render (server + client) => avoids hydration mismatch
   const [state, setState] = useState<AppState>(() => makeSeedState());
   const [hydrated, setHydrated] = useState(false);
 
-  // Lite/Full affects dashboard rendering
   const [uiMode, setUiMode] = useState<UIMode>("LITE");
 
   useEffect(() => {
-    // After mount: load real localStorage state and UI mode
     const s = loadState();
     setState(s);
     setUiMode(loadUiMode());
     setHydrated(true);
-
-    document.documentElement.classList.toggle("dark", s.theme === "dark");
   }, []);
 
   useEffect(() => {
     if (!hydrated) return;
     saveState(state);
   }, [state, hydrated]);
-
-  useEffect(() => {
-    if (!hydrated) return;
-    document.documentElement.classList.toggle("dark", state.theme === "dark");
-  }, [state.theme, hydrated]);
 
   const projects = state.projects;
 
@@ -79,21 +69,21 @@ export default function DashboardPage() {
       />
 
       <main className="mx-auto max-w-6xl px-4 py-6">
-        <div className="rounded-3xl border border-zinc-200 bg-gradient-to-br from-emerald-50 to-white p-6 dark:border-zinc-800 dark:from-zinc-950 dark:to-zinc-950">
+        <div className="rounded-3xl border border-zinc-200 bg-gradient-to-br from-emerald-50 to-white p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <div className="text-sm text-zinc-600 dark:text-zinc-300">Workspace</div>
-              <div className="mt-1 text-2xl font-semibold text-zinc-900 dark:text-white">{state.workspace.name}</div>
-              <div className="mt-2 max-w-xl text-sm text-zinc-600 dark:text-zinc-300">
-                Manage projects locally. Details (compliance, settings, jobs, reports) will live in the Project page.
+              <div className="text-sm text-zinc-600">Workspace</div>
+              <div className="mt-1 text-2xl font-semibold text-zinc-900">{state.workspace.name}</div>
+              <div className="mt-2 max-w-xl text-sm text-zinc-600">
+                Tableau de bord minimal. Les détails (jobs, conformité, paramètres avancés, rapports) sont dans la page projet.
               </div>
             </div>
 
-            <div className="rounded-2xl border border-zinc-200 bg-white/70 p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950/60">
-              <div className="text-xs text-zinc-500 dark:text-zinc-400">Overview</div>
+            <div className="rounded-2xl border border-zinc-200 bg-white/70 p-4 shadow-sm">
+              <div className="text-xs text-zinc-500">Overview</div>
               <div className="mt-1 text-sm font-semibold">{stats.projectCount} project(s)</div>
-              <div className="text-sm text-zinc-600 dark:text-zinc-300">{stats.jobCount} job(s)</div>
-              <div className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+              <div className="text-sm text-zinc-600">{stats.jobCount} job(s)</div>
+              <div className="mt-2 text-xs text-zinc-500">
                 UI mode: <span className="font-medium">{uiMode}</span>
               </div>
             </div>
@@ -101,49 +91,44 @@ export default function DashboardPage() {
         </div>
 
         <div className="mt-6">
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <div className="text-lg font-semibold text-zinc-900 dark:text-white">Projects</div>
-              <div className="text-sm text-zinc-600 dark:text-zinc-300">
-                {uiMode === "LITE"
-                  ? "Lite view: minimal project list."
-                  : "Full view: includes a bit more context (still not the full details)."}
-              </div>
+          <div>
+            <div className="text-lg font-semibold text-zinc-900">Projects</div>
+            <div className="text-sm text-zinc-600">
+              {uiMode === "LITE"
+                ? "Vue Lite: liste minimaliste."
+                : "Vue Full: un peu plus de contexte (sans surcharger)."}
             </div>
           </div>
 
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             {projects.map((p) => (
-              <div
-                key={p.id}
-                className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-950"
-              >
+              <div key={p.id} className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="truncate text-base font-semibold text-zinc-900 dark:text-white">{p.name}</div>
+                    <div className="truncate text-base font-semibold text-zinc-900">{p.name}</div>
                     {uiMode === "FULL" && (
-                      <div className="mt-1 text-sm text-zinc-600 dark:text-zinc-300">
+                      <div className="mt-1 text-sm text-zinc-600">
                         {p.description?.trim() ? p.description : "No description"}
                       </div>
                     )}
                   </div>
 
-                  <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-900 dark:bg-emerald-900/30 dark:text-emerald-200">
+                  <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-900">
                     {p.reportingRegime}
                   </span>
                 </div>
 
                 <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                  <span className="rounded-full border border-zinc-200 px-3 py-1 text-zinc-600 dark:border-zinc-800 dark:text-zinc-300">
+                  <span className="rounded-full border border-zinc-200 px-3 py-1 text-zinc-600">
                     {p.jobs.length} job(s)
                   </span>
 
                   {uiMode === "FULL" && (
                     <>
-                      <span className="rounded-full border border-zinc-200 px-3 py-1 text-zinc-600 dark:border-zinc-800 dark:text-zinc-300">
+                      <span className="rounded-full border border-zinc-200 px-3 py-1 text-zinc-600">
                         Compliance: {p.compliance.type}
                       </span>
-                      <span className="rounded-full border border-zinc-200 px-3 py-1 text-zinc-600 dark:border-zinc-800 dark:text-zinc-300">
+                      <span className="rounded-full border border-zinc-200 px-3 py-1 text-zinc-600">
                         Regions: {p.compliance.regions.join(", ")}
                       </span>
                     </>
@@ -153,10 +138,7 @@ export default function DashboardPage() {
                 {uiMode === "FULL" && p.tags.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-2 text-xs">
                     {p.tags.slice(0, 6).map((t) => (
-                      <span
-                        key={t}
-                        className="rounded-full bg-zinc-100 px-3 py-1 text-zinc-700 dark:bg-zinc-900 dark:text-zinc-200"
-                      >
+                      <span key={t} className="rounded-full bg-zinc-100 px-3 py-1 text-zinc-700">
                         {t}
                       </span>
                     ))}
@@ -164,7 +146,6 @@ export default function DashboardPage() {
                 )}
 
                 <div className="mt-5 flex flex-wrap gap-2">
-                  {/* These routes will be created in the next steps. Keeping buttons for UX continuity. */}
                   <a
                     href={`/project?projectId=${encodeURIComponent(p.id)}`}
                     className={cls(
@@ -174,19 +155,19 @@ export default function DashboardPage() {
                   >
                     Open
                   </a>
+
                   <a
                     href={`/run?projectId=${encodeURIComponent(p.id)}`}
                     className={cls(
                       "rounded-2xl px-4 py-2 text-sm font-semibold",
-                      "border border-emerald-700 text-emerald-800 hover:bg-emerald-50",
-                      "dark:border-emerald-500 dark:text-emerald-200 dark:hover:bg-emerald-900/20"
+                      "border border-emerald-700 text-emerald-800 hover:bg-emerald-50"
                     )}
                   >
                     Run
                   </a>
 
                   {uiMode === "FULL" && (
-                    <div className="ml-auto text-[11px] text-zinc-400 dark:text-zinc-500">
+                    <div className="ml-auto text-[11px] text-zinc-400">
                       ID: {p.id}
                     </div>
                   )}
@@ -195,7 +176,7 @@ export default function DashboardPage() {
             ))}
 
             {projects.length === 0 && (
-              <div className="rounded-3xl border border-dashed border-zinc-300 bg-white p-8 text-center text-sm text-zinc-600 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-300 sm:col-span-2">
+              <div className="rounded-3xl border border-dashed border-zinc-300 bg-white p-8 text-center text-sm text-zinc-600 sm:col-span-2">
                 No projects yet. Use “Create Project”.
               </div>
             )}
@@ -203,17 +184,17 @@ export default function DashboardPage() {
         </div>
 
         {uiMode === "FULL" && (
-          <div className="mt-6 rounded-3xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-950">
-            <div className="text-sm font-semibold text-zinc-900 dark:text-white">Recent activity</div>
-            <div className="mt-2 max-h-48 overflow-auto rounded-2xl border border-zinc-200 p-3 text-xs dark:border-zinc-800">
+          <div className="mt-6 rounded-3xl border border-zinc-200 bg-white p-5">
+            <div className="text-sm font-semibold text-zinc-900">Recent activity</div>
+            <div className="mt-2 max-h-48 overflow-auto rounded-2xl border border-zinc-200 p-3 text-xs">
               {state.audit.slice(0, 10).map((a) => (
-                <div key={a.id} className="border-b border-zinc-100 py-2 last:border-b-0 dark:border-zinc-900">
-                  <div className="text-zinc-600 dark:text-zinc-300">{a.tsISO}</div>
+                <div key={a.id} className="border-b border-zinc-100 py-2 last:border-b-0">
+                  <div className="text-zinc-600">{a.tsISO}</div>
                   <div className="font-medium">{a.actor}: {a.action}</div>
-                  <div className="text-zinc-500 dark:text-zinc-400">{a.target}</div>
+                  <div className="text-zinc-500">{a.target}</div>
                 </div>
               ))}
-              {state.audit.length === 0 && <div className="text-zinc-500 dark:text-zinc-400">No audit entries yet.</div>}
+              {state.audit.length === 0 && <div className="text-zinc-500">No audit entries yet.</div>}
             </div>
           </div>
         )}

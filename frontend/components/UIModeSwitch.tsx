@@ -25,7 +25,6 @@ export function UIModeSwitch(props: { className?: string; onChange?: (m: UIMode)
       className={[
         "rounded-xl border px-3 py-2 text-sm font-semibold",
         "border-zinc-300 bg-white hover:bg-zinc-50",
-        "dark:border-zinc-700 dark:bg-zinc-950 dark:hover:bg-zinc-900",
         props.className ?? "",
       ].join(" ")}
       title="Switch UI mode (Lite/Full)"

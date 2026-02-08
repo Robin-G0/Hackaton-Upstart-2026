@@ -16,8 +16,8 @@ export function Tabs<T extends string>(props: {
             className={[
               "rounded-xl px-3 py-2 text-sm border",
               active
-                ? "border-brand-blue bg-brand-blue/20 text-black dark:text-white"
-                : "border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900",
+                ? "border-brand-blue bg-brand-blue/20 text-black"
+                : "border-zinc-300 hover:bg-zinc-50",
             ].join(" ")}
           >
             {it.label}

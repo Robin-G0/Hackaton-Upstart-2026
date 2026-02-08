@@ -13,14 +13,14 @@ export function Modal(props: {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40" onClick={props.onClose} />
-      <div className="relative w-full max-w-2xl rounded-2xl bg-white p-5 shadow-xl dark:bg-zinc-950 dark:text-white">
+      <div className="relative w-full max-w-2xl rounded-2xl bg-white p-5 shadow-xl">
         <div className="flex items-start justify-between gap-3">
           <div>
             <div className="text-lg font-semibold">{props.title}</div>
-            <div className="mt-1 h-px w-full bg-zinc-200 dark:bg-zinc-800" />
+            <div className="mt-1 h-px w-full bg-zinc-200" />
           </div>
           <button
-            className="rounded-lg border border-zinc-300 px-3 py-1 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
+            className="rounded-lg border border-zinc-300 px-3 py-1 text-sm hover:bg-zinc-50"
             onClick={props.onClose}
           >
             Close

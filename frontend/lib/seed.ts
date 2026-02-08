@@ -56,7 +56,6 @@ const sampleProject: Project = {
 export function makeSeedState(): AppState {
   return {
     version: 1,
-    theme: "light",
     workspace: {
       id: "ws_local_001",
       name: "Hackathon Workspace",

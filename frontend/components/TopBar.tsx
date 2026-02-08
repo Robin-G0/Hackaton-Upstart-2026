@@ -17,15 +17,8 @@ export function TopBar(props: {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement | null>(null);
 
-  function toggleTheme() {
-    const next = props.state.theme === "light" ? "dark" : "light";
-    const s = { ...props.state, theme: next };
-    props.setState(s);
-    document.documentElement.classList.toggle("dark", next === "dark");
-  }
-
   return (
-    <div className="no-print sticky top-0 z-40 border-b border-zinc-200 bg-white/90 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/80">
+    <div className="no-print sticky top-0 z-40 border-b border-zinc-200 bg-white/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <div className="min-w-0">
           <div className="flex items-center gap-3">
@@ -35,10 +28,10 @@ export function TopBar(props: {
             </div>
 
             <div className="min-w-0">
-              <div className="truncate text-sm text-zinc-600 dark:text-zinc-300">
+              <div className="truncate text-sm text-zinc-600">
                 {props.state.workspace.name} • Local-only MVP
               </div>
-              <div className="truncate text-base font-semibold text-black dark:text-white">
+              <div className="truncate text-base font-semibold text-black">
                 Carbon-Aware Cloud Computing {props.titleRight ? `— ${props.titleRight}` : ""}
               </div>
             </div>
@@ -47,15 +40,8 @@ export function TopBar(props: {
 
         <div className="flex flex-wrap items-center justify-end gap-2">
           <button
-            onClick={toggleTheme}
-            className="rounded-xl border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
-          >
-            Theme
-          </button>
-
-          <button
             onClick={() => downloadJson("carbon-aware-export.json", props.state)}
-            className="rounded-xl border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
+            className="rounded-xl border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50"
           >
             Export JSON
           </button>
@@ -74,14 +60,13 @@ export function TopBar(props: {
                 return;
               }
               props.setState(imported);
-              document.documentElement.classList.toggle("dark", imported.theme === "dark");
               if (fileRef.current) fileRef.current.value = "";
               router.push("/dashboard");
             }}
           />
           <button
             onClick={() => fileRef.current?.click()}
-            className="rounded-xl border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
+            className="rounded-xl border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50"
           >
             Import JSON
           </button>

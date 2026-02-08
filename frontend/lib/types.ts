@@ -28,18 +28,18 @@ export interface HardConstraints {
 }
 
 export interface SchedulingConstraints {
-  deadlineISO?: string;      // date-time ISO or date ISO for MVP
+  deadlineISO?: string;
   earliestStartISO?: string;
   batchableShiftable: boolean;
 }
 
 export interface ProviderConstraints {
-  allowedProviders: string[];        // mocked
-  allowedInstanceFamilies: string[]; // mocked
+  allowedProviders: string[];
+  allowedInstanceFamilies: string[];
 }
 
 export interface DataHandlingToggles {
-  enforceDataResidency: boolean;     // compute + storage same region
+  enforceDataResidency: boolean;
   noCrossBorderTransfer: boolean;
 }
 
@@ -61,7 +61,7 @@ export type OptimizationProfile = OptimizationProfileLite | OptimizationProfileF
 
 export interface CompliancePolicy {
   type: CompliancePolicyType;
-  regions: string[]; // e.g. ["CA", "EU"] or country codes ["CA","FR","DE"]
+  regions: string[];
   allowJobOverride: boolean;
   enforceDataResidency: boolean;
   noCrossBorderTransfer: boolean;
@@ -79,7 +79,7 @@ export interface Estimates {
 export interface JobCompute {
   gpuRequired: boolean;
   gpuClass: "T4" | "L4" | "A10" | "A100" | "H100" | "NONE";
-  expectedRuntimeHours: number; // rough
+  expectedRuntimeHours: number;
 }
 
 export interface Job {
@@ -93,10 +93,10 @@ export interface Job {
   compute: JobCompute;
 
   inheritProjectSettings: boolean;
-  overrideProfile?: OptimizationProfile; // if inheritProjectSettings=false
+  overrideProfile?: OptimizationProfile;
 
   inheritCompliance: boolean;
-  overrideCompliance?: CompliancePolicy; // if allowed & inheritCompliance=false
+  overrideCompliance?: CompliancePolicy;
 
   status: "IDLE" | "QUEUED" | "RUNNING" | "DONE";
   notes?: string;
@@ -110,12 +110,11 @@ export interface Project {
 
   reportingRegime: ReportingRegime;
 
-  profile: OptimizationProfile; // project-level
+  profile: OptimizationProfile;
   compliance: CompliancePolicy;
 
   jobs: Job[];
 
-  // optional cache for seed/demo; UI recomputes anyway
   seedEstimates?: { perJob: Record<string, Estimates>; projectTotals: Estimates };
 }
 
@@ -129,7 +128,7 @@ export interface UserDefaults {
 export interface AuditEntry {
   id: string;
   tsISO: string;
-  actor: string; // mock user
+  actor: string;
   action: string;
   target: string;
 }
@@ -161,5 +160,4 @@ export interface AppState {
   defaults: UserDefaults;
   projects: Project[];
   audit: AuditEntry[];
-  theme: "light" | "dark";
 }
