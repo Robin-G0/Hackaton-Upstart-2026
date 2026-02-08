@@ -1,6 +1,7 @@
 import { AppState, Project } from "./types";
 
-const nowISO = () => new Date().toISOString();
+const SEED_NOW_ISO = "2026-02-07T12:00:00.000Z";
+const SEED_DEADLINE_DATE = "2026-02-09";
 
 const sampleProject: Project = {
   id: "proj_seed_001",
@@ -41,7 +42,7 @@ const sampleProject: Project = {
       name: "Training run",
       type: "TRAINING",
       priority: "CRITICAL",
-      deadlineISO: new Date(Date.now() + 1000 * 60 * 60 * 24 * 2).toISOString().slice(0, 10),
+      deadlineISO: SEED_DEADLINE_DATE,
       batchableShiftable: false,
       compute: { gpuRequired: true, gpuClass: "A100", expectedRuntimeHours: 11.0 },
       inheritProjectSettings: true,
@@ -49,40 +50,7 @@ const sampleProject: Project = {
       status: "IDLE",
       notes: "GPU required; deadline constrained.",
     },
-    {
-      id: "job_003",
-      name: "Evaluation + benchmarks",
-      type: "BATCH",
-      priority: "MEDIUM",
-      batchableShiftable: true,
-      compute: { gpuRequired: true, gpuClass: "L4", expectedRuntimeHours: 2.8 },
-      inheritProjectSettings: true,
-      inheritCompliance: true,
-      status: "IDLE",
-      notes: "Batchable; can shift to greener window.",
-    },
-    {
-      id: "job_004",
-      name: "Packaging + artifact export",
-      type: "CI",
-      priority: "LOW",
-      batchableShiftable: true,
-      compute: { gpuRequired: false, gpuClass: "NONE", expectedRuntimeHours: 1.2 },
-      inheritProjectSettings: true,
-      inheritCompliance: true,
-      status: "IDLE",
-      notes: "CI-style job; low compute.",
-    },
   ],
-  seedEstimates: {
-    perJob: {
-      job_001: { maxCostUsd: 180, maxCO2Kg: 8.6, maxPowerKw: 1.2, maxTimeHours: 5.0, confidence: "MED", assumptions: ["Mock rates & grid factors", "Includes conservative buffer"] },
-      job_002: { maxCostUsd: 2200, maxCO2Kg: 210, maxPowerKw: 5.5, maxTimeHours: 16.0, confidence: "HIGH", assumptions: ["GPU price worst-case", "Highest plausible grid intensity within allowed regions + buffer"] },
-      job_003: { maxCostUsd: 320, maxCO2Kg: 22, maxPowerKw: 3.2, maxTimeHours: 4.2, confidence: "MED", assumptions: ["Batch window could shift; max assumes unfavorable window"] },
-      job_004: { maxCostUsd: 75, maxCO2Kg: 2.1, maxPowerKw: 0.9, maxTimeHours: 2.0, confidence: "HIGH", assumptions: ["Short CI workload", "Conservative time buffer"] },
-    },
-    projectTotals: { maxCostUsd: 2775, maxCO2Kg: 242.7, maxPowerKw: 5.5, maxTimeHours: 27.2, confidence: "MED", assumptions: ["Project totals = sum of job maxima", "Not probabilistic; deliberately conservative"] },
-  },
 };
 
 export function makeSeedState(): AppState {
@@ -100,10 +68,7 @@ export function makeSeedState(): AppState {
     },
     defaults: {
       defaultReportingRegime: "BOTH",
-      defaultProfile: {
-        mode: "LITE",
-        preset: "BALANCED",
-      },
+      defaultProfile: { mode: "LITE", preset: "BALANCED" },
       defaultCompliance: {
         type: "WHITELIST",
         regions: ["EU", "CA"],
@@ -115,7 +80,7 @@ export function makeSeedState(): AppState {
     },
     projects: [sampleProject],
     audit: [
-      { id: "aud_001", tsISO: nowISO(), actor: "System", action: "Seed data initialized", target: sampleProject.name },
+      { id: "aud_001", tsISO: SEED_NOW_ISO, actor: "System", action: "Seed data initialized", target: sampleProject.name },
     ],
   };
 }

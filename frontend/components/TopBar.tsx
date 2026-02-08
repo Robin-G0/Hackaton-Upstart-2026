@@ -4,12 +4,15 @@ import { useRef } from "react";
 import { AppState } from "@/lib/types";
 import { downloadJson, readJsonFile } from "@/lib/storage";
 import { useRouter } from "next/navigation";
+import { UIModeSwitch } from "@/components/UIModeSwitch";
+import type { UIMode } from "@/lib/uiMode";
 
 export function TopBar(props: {
   state: AppState;
   setState: (s: AppState) => void;
   titleRight?: string;
   onCreateProject: () => void;
+  onUiModeChange?: (m: UIMode) => void;
 }) {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement | null>(null);
@@ -26,7 +29,11 @@ export function TopBar(props: {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <div className="min-w-0">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-brand-green" />
+            <div className="flex items-center gap-2">
+              <div className="h-9 w-9 rounded-xl bg-brand-green" />
+              <UIModeSwitch onChange={props.onUiModeChange} />
+            </div>
+
             <div className="min-w-0">
               <div className="truncate text-sm text-zinc-600 dark:text-zinc-300">
                 {props.state.workspace.name} • Local-only MVP
@@ -69,7 +76,7 @@ export function TopBar(props: {
               props.setState(imported);
               document.documentElement.classList.toggle("dark", imported.theme === "dark");
               if (fileRef.current) fileRef.current.value = "";
-              router.push("/");
+              router.push("/dashboard");
             }}
           />
           <button
@@ -81,7 +88,7 @@ export function TopBar(props: {
 
           <button
             onClick={props.onCreateProject}
-            className="rounded-xl bg-brand-green px-4 py-2 text-sm font-semibold text-white hover:opacity-95"
+            className="rounded-xl bg-gradient-to-r from-emerald-700 to-green-800 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-95"
           >
             Create Project
           </button>
