@@ -574,7 +574,7 @@ export default function Page() {
             },
             {
               name: "Team Tier",
-              price: "$29-$99 per user/month",
+              price: "$59 per user/month",
               detail: "Unlimited projects/jobs",
               bullets: [
     
@@ -588,7 +588,7 @@ export default function Page() {
             },
             {
               name: "Pro / FinOps Tier",
-              price: "$299-$499 per team/month",
+              price: "Custom",
               detail: "Advanced constraints (budget, CO2 caps, deadlines)",
               bullets: [
       
