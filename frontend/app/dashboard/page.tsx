@@ -58,6 +58,25 @@ export default function DashboardPage() {
     });
   }
 
+  function deleteProject(projectId: string) {
+    const p = state.projects.find((x) => x.id === projectId);
+    if (!p) return;
+
+    const ok = window.confirm(`Delete project "${p.name}"?\nThis cannot be undone.`);
+    if (!ok) return;
+
+    const remaining = state.projects.filter((x) => x.id !== projectId);
+
+    setState({
+      ...state,
+      projects: remaining,
+      audit: [
+        { id: uid("aud"), tsISO: new Date().toISOString(), actor: "Robin (You)", action: "Deleted project", target: p.name },
+        ...state.audit,
+      ],
+    });
+  }
+
   return (
     <div>
       <TopBar
@@ -165,6 +184,18 @@ export default function DashboardPage() {
                   >
                     Run
                   </a>
+
+                  <button
+                    type="button"
+                    onClick={() => deleteProject(p.id)}
+                    className={cls(
+                      "rounded-2xl px-4 py-2 text-sm font-semibold shadow-sm",
+                      "border border-red-200 bg-gradient-to-r from-red-50 to-white text-red-700 hover:from-red-100"
+                    )}
+                    title="Delete project (local only)"
+                  >
+                    Delete
+                  </button>
 
                   {uiMode === "FULL" && (
                     <div className="ml-auto text-[11px] text-zinc-400">
