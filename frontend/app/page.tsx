@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import datacenterDark from "../image/dark-datacenter.png";
+import { useEffect, useRef, useState } from "react";
+import nvidiaImage from "../image/nvidia.png";
 import datacenterLight from "../image/datacenter.png";
 import aronPhoto from "../image/aron-bg.jpg";
 import logo from "../image/logo-verdante.png";
@@ -55,83 +56,187 @@ export default function Page() {
     },
   ];
 
+  const heroImageRef = useRef<HTMLDivElement | null>(null);
+  const signalAreaRef = useRef<HTMLDivElement | null>(null);
+  const [signalPaths, setSignalPaths] = useState<string[]>([]);
+  const [signalBox, setSignalBox] = useState({ width: 0, height: 0 });
+
+  const signalCount = 8;
+
+  useEffect(() => {
+    const generatePaths = () => {
+      const sectionRect = signalAreaRef.current?.getBoundingClientRect();
+      if (!sectionRect) return;
+
+      setSignalBox({ width: sectionRect.width, height: sectionRect.height });
+      const imageRect = heroImageRef.current?.getBoundingClientRect();
+      const fallbackX = sectionRect.width / 2;
+      const fallbackY = sectionRect.height / 2;
+      const startX = imageRect
+        ? imageRect.left + imageRect.width / 2 - sectionRect.left
+        : fallbackX;
+      const startY = imageRect
+        ? imageRect.top + imageRect.height / 2 - sectionRect.top
+        : fallbackY;
+      const maxSteps = 5;
+
+      const paths = Array.from({ length: signalCount }, () => {
+        let x = startX;
+        let y = startY;
+        let direction = Math.floor(Math.random() * 4);
+        const points: Array<[number, number]> = [[x, y]];
+
+        for (let step = 0; step < maxSteps; step += 1) {
+          const length = 120 + Math.random() * 240;
+
+          switch (direction) {
+            case 0:
+              x += length;
+              break;
+            case 1:
+              y += length;
+              break;
+            case 2:
+              x -= length;
+              break;
+            default:
+              y -= length;
+              break;
+          }
+
+          points.push([x, y]);
+          direction = (direction + (Math.random() > 0.5 ? 1 : 3)) % 4;
+        }
+
+        return points
+          .map((point, index) => `${index === 0 ? "M" : "L"} ${point[0]} ${point[1]}`)
+          .join(" ");
+      });
+
+      setSignalPaths(paths);
+    };
+
+    const frame = window.requestAnimationFrame(generatePaths);
+    window.addEventListener("resize", generatePaths);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", generatePaths);
+    };
+  }, []);
+
   return (
     <main
       style={{
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        padding: "32px 24px 48px",
-        backgroundColor: "#ffffff",
+        padding: 0,
+        margin: 0,
+        background: "linear-gradient(180deg, #e6f3e6 0%, #ffffff 28%)",
       }}
     >
-      <header
+      <div
+        ref={signalAreaRef}
         style={{
-          width: "100%",
-          maxWidth: 1120,
-          margin: "0 auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          position: "relative",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <Image
-            src={logo}
-            alt="Verdante logo"
-            width={72}
-            height={72}
-            priority
-          />
-          <div
-            style={{
-              fontSize: 18,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "#3b5b46",
-              fontWeight: 600,
-            }}
-          >
-            Verdante
-          </div>
-        </div>
-        <button
-          type="button"
-          style={{
-            border: "1px solid #1f3326",
-            background: "transparent",
-            color: "#1f3326",
-            padding: "10px 18px",
-            borderRadius: 999,
-            fontSize: 14,
-            fontWeight: 600,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            cursor: "pointer",
-          }}
+        <svg
+          className="signalCanvas"
+          aria-hidden="true"
+          width={signalBox.width}
+          height={signalBox.height}
+          viewBox={`0 0 ${signalBox.width} ${signalBox.height}`}
+          preserveAspectRatio="none"
         >
-          Login
-        </button>
-      </header>
-
-      <section
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
+          <defs>
+            <linearGradient id="signalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#c9d1c6" />
+              <stop offset="45%" stopColor="#c9d1c6" />
+              <stop offset="60%" stopColor="#58a56c" />
+              <stop offset="100%" stopColor="#58a56c" />
+            </linearGradient>
+          </defs>
+          {signalPaths.map((path, index) => (
+            <path
+              key={`${path}-${index}`}
+              className="signalPath"
+              d={path}
+            />
+          ))}
+        </svg>
+        <header
           style={{
             width: "100%",
             maxWidth: 1120,
+            margin: "0 auto",
             display: "flex",
             alignItems: "center",
-            gap: 48,
-            flexWrap: "wrap",
+            justifyContent: "space-between",
+            position: "relative",
+            zIndex: 1,
           }}
         >
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <Image
+              src={logo}
+              alt="Verdante logo"
+              width={72}
+              height={72}
+              priority
+            />
+            <div
+              style={{
+                fontSize: 18,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "#3b5b46",
+                fontWeight: 600,
+              }}
+            >
+              Verdante
+            </div>
+          </div>
+          <button
+            type="button"
+            style={{
+              border: "1px solid #1f3326",
+              background: "transparent",
+              color: "#1f3326",
+              padding: "10px 18px",
+              borderRadius: 999,
+              fontSize: 14,
+              fontWeight: 600,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              cursor: "pointer",
+            }}
+          >
+            Login
+          </button>
+        </header>
+
+        <section
+          style={{
+            minHeight: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: 1120,
+              display: "flex",
+              alignItems: "center",
+              gap: 48,
+              flexWrap: "wrap",
+              position: "relative",
+              zIndex: 1,
+            }}
+          >
           <section style={{ flex: "1 1 320px", minWidth: 280 }}>
             <h1
               style={{
@@ -141,7 +246,7 @@ export default function Page() {
                 color: "#0c0f0a",
               }}
             >
-              Carbon-Aware Cloud Computing
+              GreenFlow Compute
             </h1>
             <p
               style={{
@@ -151,9 +256,9 @@ export default function Page() {
                 color: "#4a5a4a",
                 maxWidth: 420,
               }}
-            >
-              Optimize infrastructure decisions with real-time grid signals, workload shaping, and
-              sustainability analytics.
+            > We are Carbon-Aware Cloud Orchestrator, we
+              Optimize compute for CO2, cost, and compliance with transparent, audit-ready
+              reporting.
             </p>
           </section>
           <section
@@ -170,9 +275,10 @@ export default function Page() {
                 maxWidth: 520,
                 position: "relative",
               }}
+              ref={heroImageRef}
             >
               <Image
-                src={datacenterDark}
+                src={nvidiaImage}
                 alt="Datacenter"
                 style={{
                   width: "100%",
@@ -182,8 +288,9 @@ export default function Page() {
               />
             </div>
           </section>
-        </div>
-      </section>
+          </div>
+        </section>
+      </div>
       <section
         style={{
           width: "100%",
@@ -275,17 +382,17 @@ export default function Page() {
           {[
             {
               name: "Aron Segovia",
-              summary: "Short summary of Aron goes here.",
+              summary: "Aron Segovia is a multilingual computer engineering bachelor’s student at McGill University.",
               photo: aronPhoto,
             },
             {
               name: "Robin Glaude",
-              summary: "Short summary of Robin goes here.",
+              summary: "Robin Glaude is a master’s student in software engineering at McGill University.",
               photo: robinPhoto,
             },
             {
               name: "Shrin Zoufan",
-              summary: "Short summary of Shrin goes here.",
+              summary: "Shrin Zoufan is a PhD student in civil engineering at Concordia University.",
               photo: shirinPhoto,
             },
           ].map((member) => (
@@ -331,6 +438,49 @@ export default function Page() {
           />
           <OrbitingPoints points={orbitPoints} radius={190} size={32} />
         </div>
+      </section>
+      <section
+        style={{
+          width: "100%",
+          maxWidth: 1120,
+          margin: "0 auto 32px",
+          padding: "56px 24px 64px",
+          textAlign: "center",
+          borderTop: "8px solid #4f8f78",
+          background: "linear-gradient(180deg, #eef7f0 0%, #ffffff 60%)",
+          borderRadius: 24,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 20,
+          boxShadow: "0 16px 40px rgba(31, 51, 38, 0.08)",
+        }}
+      >
+        <h2 style={{ margin: 0, fontSize: "clamp(2rem, 3.4vw, 2.9rem)", color: "#0c0f0a" }}>
+          Ready to Make Your Cloud Greener?
+        </h2>
+        <p style={{ margin: 0, maxWidth: 640, color: "#4a5a4a", lineHeight: 1.6, fontSize: "1.05rem" }}>
+          Join forward-thinking companies reducing their carbon footprint without compromising
+          performance.
+        </p>
+        <button
+          type="button"
+          style={{
+            marginTop: 8,
+            border: "none",
+            background: "#4f8f78",
+            color: "#ffffff",
+            padding: "14px 28px",
+            borderRadius: 14,
+            fontSize: 16,
+            fontWeight: 600,
+            letterSpacing: "0.02em",
+            cursor: "pointer",
+            boxShadow: "0 12px 20px rgba(79, 143, 120, 0.25)",
+          }}
+        >
+          Start Calculating Savings →
+        </button>
       </section>
       <section
         style={{
@@ -397,6 +547,67 @@ export default function Page() {
           ))}
         </div>
       </section>
+      <footer
+        style={{
+          width: "100%",
+          marginTop: 24,
+          background: "linear-gradient(180deg, #2f5a4b 0%, #23483d 100%)",
+          color: "#e9f2ee",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 1120,
+            margin: "0 auto",
+            padding: "48px 24px 28px",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: 28,
+            alignItems: "start",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <span style={{ fontSize: 26 }}>❧</span>
+              <div style={{ fontSize: 22, fontWeight: 600 }}>Verdante</div>
+            </div>
+            <p style={{ margin: 0, color: "#d9e6e0", lineHeight: 1.6, maxWidth: 260 }}>
+              Carbon-aware cloud computing for a sustainable future.
+            </p>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ fontSize: 16, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              Platform
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, color: "#d9e6e0" }}>
+              <span>Multi-region deployment</span>
+              <span>GDPR compliant</span>
+              <span>Real-time optimization</span>
+              <span>ESG reporting</span>
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ fontSize: 16, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              Contact
+            </div>
+            <p style={{ margin: 0, color: "#d9e6e0", lineHeight: 1.6, maxWidth: 260 }}>
+              Ready to turn your compute greener? Get started in one click.
+            </p>
+          </div>
+        </div>
+        <div
+          style={{
+            maxWidth: 1120,
+            margin: "0 auto",
+            padding: "0 24px 28px",
+            color: "#b8cec4",
+            borderTop: "1px solid rgba(233, 242, 238, 0.15)",
+            textAlign: "center",
+          }}
+        >
+          <div style={{ paddingTop: 18 }}>© 2026 Verdante. All rights reserved.</div>
+        </div>
+      </footer>
       <div
         aria-hidden="true"
         style={{
@@ -414,6 +625,29 @@ export default function Page() {
         }}
       />
       <style jsx global>{`
+        .signalCanvas {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          z-index: 0;
+          width: 100%;
+          height: 100%;
+        }
+        .signalPath {
+          fill: none;
+          stroke: url(#signalGradient);
+          stroke-width: 2;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          opacity: 0.7;
+          stroke-dasharray: 18 12;
+          animation: signalDash 4s linear infinite;
+        }
+        @keyframes signalDash {
+          to {
+            stroke-dashoffset: -120;
+          }
+        }
         @keyframes floatArrow {
           0% {
             transform: translateX(-50%) translateY(0) rotate(45deg);
