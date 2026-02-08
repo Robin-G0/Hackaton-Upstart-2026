@@ -135,6 +135,11 @@ export default function ProjectPage() {
     alert("Saved as defaults (local-only).");
   }
 
+  function goToJobs() {
+    if (!project) return;
+    router.push(`/jobs?projectId=${encodeURIComponent(project.id)}`);
+  }
+
   if (!project) {
     return (
       <div>
@@ -240,7 +245,9 @@ export default function ProjectPage() {
               <label className="text-xs text-zinc-600">Reporting regime</label>
               <select
                 value={project.reportingRegime}
-                onChange={(e) => patchProject({ reportingRegime: e.target.value as ReportingRegime })}
+                onChange={(e) =>
+                  patchProject({ reportingRegime: e.target.value as ReportingRegime })
+                }
                 className="mt-1 w-full rounded-2xl border border-zinc-300 bg-white/80 px-4 py-3 text-sm outline-none focus:border-emerald-600"
               >
                 <option value="CANADA">Canada</option>
@@ -287,7 +294,11 @@ export default function ProjectPage() {
                 onChange={(e) => {
                   const m = e.target.value as "LITE" | "FULL";
                   if (m === "LITE") setProjectProfile({ mode: "LITE", preset: "BALANCED" });
-                  else setProjectProfile({ mode: "FULL", weights: { co2: 40, cost: 30, time: 30, power: 0 } });
+                  else
+                    setProjectProfile({
+                      mode: "FULL",
+                      weights: { co2: 40, cost: 30, time: 30, power: 0 },
+                    });
                 }}
                 className="mt-1 w-full rounded-2xl border border-zinc-300 bg-white/80 px-4 py-3 text-sm outline-none focus:border-emerald-600"
               >
@@ -299,7 +310,9 @@ export default function ProjectPage() {
             <div className="text-sm text-zinc-600">
               <div className="text-xs text-zinc-500">Purpose</div>
               <div className="mt-1">
-                {profile.mode === "LITE" ? "Preset-driven, quick configuration." : "Weighted objectives (more control)."}
+                {profile.mode === "LITE"
+                  ? "Preset-driven, quick configuration."
+                  : "Weighted objectives (more control)."}
               </div>
             </div>
           </div>
@@ -311,7 +324,12 @@ export default function ProjectPage() {
                 <label className="text-xs text-zinc-600">Preset</label>
                 <select
                   value={profile.preset}
-                  onChange={(e) => setProjectProfile({ mode: "LITE", preset: e.target.value as LitePreset })}
+                  onChange={(e) =>
+                    setProjectProfile({
+                      mode: "LITE",
+                      preset: e.target.value as LitePreset,
+                    })
+                  }
                   className="mt-1 w-full rounded-2xl border border-zinc-300 bg-white/80 px-4 py-3 text-sm outline-none focus:border-emerald-600"
                 >
                   <option value="GREENEST">Greenest</option>
@@ -341,8 +359,8 @@ export default function ProjectPage() {
                   </div>
                   <div className="mt-3 grid gap-2 text-xs">
                     <div>
-                      Current weights: CO₂ {profile.weights.co2}, Cost {profile.weights.cost}, Time {profile.weights.time}, Power{" "}
-                      {profile.weights.power}
+                      Current weights: CO₂ {profile.weights.co2}, Cost {profile.weights.cost},
+                      Time {profile.weights.time}, Power {profile.weights.power}
                     </div>
                   </div>
                 </div>
@@ -351,7 +369,10 @@ export default function ProjectPage() {
                   {(["co2", "cost", "time", "power"] as const).map((k) => {
                     const v = profile.weights[k];
                     return (
-                      <div key={k} className="rounded-2xl border border-emerald-200 bg-white/80 p-4">
+                      <div
+                        key={k}
+                        className="rounded-2xl border border-emerald-200 bg-white/80 p-4"
+                      >
                         <div className="flex items-center justify-between">
                           <label className="text-xs text-zinc-600">{k.toUpperCase()} weight</label>
                           <div className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-900">
@@ -409,7 +430,9 @@ export default function ProjectPage() {
             </div>
 
             <div>
-              <label className="text-xs text-zinc-600">Regions / Countries (comma-separated; supports EU shortcut)</label>
+              <label className="text-xs text-zinc-600">
+                Regions / Countries (comma-separated; supports EU shortcut)
+              </label>
               <input
                 value={project.compliance.regions.join(", ")}
                 onChange={(e) => updateCompliance({ regions: parseTags(e.target.value) })}
@@ -453,30 +476,31 @@ export default function ProjectPage() {
           </div>
         </div>
 
-        {/* Next steps placeholder */}
+        {/* Next steps (fixed redirection, no alerts) */}
         <div className="mt-6 rounded-3xl border border-emerald-200 bg-gradient-to-br from-white via-emerald-50 to-white p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <div className="text-sm font-semibold text-zinc-900">Next steps</div>
               <div className="mt-1 text-sm text-zinc-600">
-                Jobs management and reporting will be added next (step-by-step).
+                Jobs and reports are available in the Jobs page for this project.
               </div>
             </div>
 
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
-                onClick={() => alert("Next step: Jobs UI (we will implement in the next message).")}
-                className="rounded-2xl border border-zinc-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-zinc-50"
+                onClick={goToJobs}
+                className="rounded-2xl border border-emerald-700 bg-white px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-50"
               >
-                Configure Jobs (next)
+                Configure Jobs
               </button>
+
               <button
                 type="button"
-                onClick={() => alert("Next step: Run + Reports UI (we will implement later).")}
+                onClick={goToJobs}
                 className="rounded-2xl bg-gradient-to-r from-emerald-700 to-green-800 px-4 py-2 text-sm font-semibold text-white hover:opacity-95"
               >
-                Reports (later)
+                Reports & Receipts
               </button>
             </div>
           </div>
