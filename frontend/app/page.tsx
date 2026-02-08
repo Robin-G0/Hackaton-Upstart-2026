@@ -200,6 +200,7 @@ export default function Page() {
           </div>
           <button
             type="button"
+            onClick={() => { window.location.href = "/dashboard"; }}
             style={{
               border: "1px solid #1f3326",
               background: "transparent",
@@ -304,53 +305,104 @@ export default function Page() {
           textAlign: "center",
         }}
       >
-        <h2 style={{ margin: 0, fontSize: "clamp(2rem, 3vw, 2.75rem)" }}>What We Do</h2>
-        <p style={{ margin: 0, maxWidth: 600, color: "#4a5a4a", lineHeight: 1.6 }}>
-          We sit between your cloud scheduler and energy signals, translating grid intensity into
-          actionable decisions.
+        <h2 style={{ margin: 0, fontSize: "clamp(2rem, 3vw, 2.75rem)" }}>
+          What our company does
+        </h2>
+        <p style={{ margin: 0, maxWidth: 760, color: "#4a5a4a", lineHeight: 1.7 }}>
+          We help organizations run their cloud computing in a
+          <span style={{ color: "#2f7d5a", fontWeight: 700 }}> greener</span>,
+          <span style={{ color: "#2f7d5a", fontWeight: 700 }}> cheaper</span>, and
+          <span style={{ color: "#2f7d5a", fontWeight: 700 }}> more compliant</span> way -
+          automatically.
         </p>
         <div
           style={{
             width: "100%",
             display: "grid",
-            gap: 20,
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: 18,
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            textAlign: "left",
           }}
         >
-          {[
-            {
-              title: "Measure",
-              detail: "Ingest live carbon data and workload telemetry.",
-            },
-            {
-              title: "Optimize",
-              detail: "Recommend timing, region shifts, and load shaping.",
-            },
-            {
-              title: "Act",
-              detail: "Automate policies and track savings over time.",
-            },
-          ].map((step) => (
-            <div
-              key={step.title}
-              style={{
-                border: "1px solid #d4e2d6",
-                borderRadius: 20,
-                padding: "20px",
-                background: "#ffffff",
-                textAlign: "left",
-                display: "flex",
-                flexDirection: "column",
-                gap: 10,
-                minHeight: 140,
-              }}
-            >
-              <div style={{ fontSize: 14, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-                {step.title}
-              </div>
-              <p style={{ margin: 0, color: "#4a5a4a", lineHeight: 1.5 }}>{step.detail}</p>
+          <div
+            style={{
+              border: "1px solid #d4e2d6",
+              borderRadius: 20,
+              padding: "20px",
+              background: "#ffffff",
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
+              minHeight: 190,
+            }}
+          >
+            <p style={{ margin: 0, color: "#4a5a4a", lineHeight: 1.6 }}>
+              Most companies run AI training, data processing, and other heavy compute jobs without
+              knowing:
+            </p>
+            <ul style={{ margin: 0, paddingLeft: 18, color: "#4a5a4a", lineHeight: 1.6 }}>
+              <li>
+                <span style={{ color: "#2f7d5a", fontWeight: 700 }}>1.</span> how much
+                <span style={{ color: "#2f7d5a", fontWeight: 700 }}> CO₂</span> they emit
+              </li>
+              <li>
+                <span style={{ color: "#2f7d5a", fontWeight: 700 }}>2.</span> whether they’re
+                following Canada/EU
+                <span style={{ color: "#2f7d5a", fontWeight: 700 }}> data-residency</span> rules
+              </li>
+              <li>
+                <span style={{ color: "#2f7d5a", fontWeight: 700 }}>3.</span> or whether they’re
+                <span style={{ color: "#2f7d5a", fontWeight: 700 }}> overspending</span> because
+                they run jobs at the wrong time or in the wrong region
+              </li>
+            </ul>
+            <p style={{ margin: 0, color: "#4a5a4a", lineHeight: 1.6 }}>
+              Training a single large AI model can emit over
+              <span style={{ color: "#2f7d5a", fontWeight: 700 }}> 626,000 pounds</span> of
+              <span style={{ color: "#2f7d5a", fontWeight: 700 }}> CO2</span>,
+              equivalent to the lifetime emissions of five cars.
+            </p>
+            <p style={{ margin: 0, color: "#4a5a4a", lineHeight: 1.6 }}>We solve that.</p>
+          </div>
+          <div
+            style={{
+              border: "1px solid #d4e2d6",
+              borderRadius: 20,
+              padding: "20px",
+              background: "#ffffff",
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
+              minHeight: 190,
+            }}
+          >
+            <div style={{ fontSize: 14, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+              The simplest analogy
             </div>
-          ))}
+            <p style={{ margin: 0, color: "#4a5a4a", lineHeight: 1.6 }}>
+              Think of us as a map for cloud computing:
+            </p>
+            <p style={{ margin: 0, color: "#4a5a4a", lineHeight: 1.6 }}>
+              <span style={{ color: "#2f7d5a", fontWeight: 700 }}>1.</span> You tell us where you
+              want to go (run your workload).
+            </p>
+            <p style={{ margin: 0, color: "#4a5a4a", lineHeight: 1.6 }}>
+              <span style={{ color: "#2f7d5a", fontWeight: 700 }}>2.</span> You tell us your
+              priorities (cheapest, greenest, fastest, or compliant).
+            </p>
+            <p style={{ margin: 0, color: "#4a5a4a", lineHeight: 1.6 }}>
+              <span style={{ color: "#2f7d5a", fontWeight: 700 }}>3.</span> We show you the
+              <span style={{ color: "#2f7d5a", fontWeight: 700 }}> best route</span>, the
+              <span style={{ color: "#2f7d5a", fontWeight: 700 }}> majored case cost</span>, and the
+              <span style={{ color: "#2f7d5a", fontWeight: 700 }}> carbon impact</span>.
+            </p>
+            <p style={{ margin: 0, color: "#4a5a4a", lineHeight: 1.6 }}>
+              <span style={{ color: "#2f7d5a", fontWeight: 700 }}>4.</span> Then we simulate the
+              run and generate a
+              <span style={{ color: "#2f7d5a", fontWeight: 700 }}> regulatory-ready</span> emissions
+              report.
+            </p>
+          </div>
         </div>
       </section>
       <section
@@ -382,17 +434,17 @@ export default function Page() {
           {[
             {
               name: "Aron Segovia",
-              summary: "Aron Segovia is a multilingual computer engineering bachelor’s student at McGill University.",
+              summary: "Aron Segovia is a multilingual Computer Engineering bachelor’s student at McGill University.",
               photo: aronPhoto,
             },
             {
               name: "Robin Glaude",
-              summary: "Robin Glaude is a master’s student in software engineering at McGill University.",
+              summary: "Robin Glaude is a master’s student in Software Engineering doing a certificate of management at McGill University.",
               photo: robinPhoto,
             },
             {
               name: "Shrin Zoufan",
-              summary: "Shrin Zoufan is a PhD student in civil engineering at Concordia University.",
+              summary: "Shrin Zoufan is a PhD student in Civil Engineering at Concordia University.",
               photo: shirinPhoto,
             },
           ].map((member) => (
@@ -465,6 +517,7 @@ export default function Page() {
         </p>
         <button
           type="button"
+          onClick={() => { window.location.href = "/dashboard"; }}
           style={{
             marginTop: 8,
             border: "none",
@@ -509,19 +562,44 @@ export default function Page() {
         >
           {[
             {
-              name: "Starter",
-              price: "$0",
-              detail: "Lightweight insights for small teams",
+              name: "Freemium / Developer Tier",
+              price: "Free",
+              detail: "Local-only planner (your MVP)",
+              bullets: [
+                "• 1 project, up to 5 jobs",
+                "• Basic presets (Greenest / Cheapest / Fastest)",
+                "• JSON export",
+                "• No compliance templates",
+              ],
             },
             {
-              name: "Growth",
-              price: "$299",
-              detail: "Automation plus forecasting for scaling orgs",
+              name: "Team Tier",
+              price: "$29-$99 per user/month",
+              detail: "Unlimited projects/jobs",
+              bullets: [
+    
+                "• Unlimited projects/jobs",
+                "• Full optimization weights",
+                "• Canada/EU compliance templates",
+                "• Team workspace + mock collaboration",
+                "• Report exports (PDF + JSON)",
+                "• Local-only or cloud-synced (when you build backend)",
+              ],
             },
             {
-              name: "Enterprise",
-              price: "Custom",
-              detail: "Full governance, multi-region optimization",
+              name: "Pro / FinOps Tier",
+              price: "$299-$499 per team/month",
+              detail: "Advanced constraints (budget, CO2 caps, deadlines)",
+              bullets: [
+      
+  
+                "• Provider/region modeling",
+                "• Custom compliance policies",
+                "• Audit logs",
+                "• Integration hooks (when backend exists)",
+                "• Multi-project rollups",
+                "• Value metric: per team (matches FinOps tooling like CloudZero, Vantage)",
+              ],
             },
           ].map((plan) => (
             <div
@@ -542,7 +620,21 @@ export default function Page() {
                 {plan.name}
               </div>
               <div style={{ fontSize: 28, fontWeight: 600 }}>{plan.price}</div>
-              <p style={{ margin: 0, color: "#4a5a4a", lineHeight: 1.5 }}>{plan.detail}</p>
+              <ul
+                style={{
+                  margin: 0,
+                  paddingLeft: 18,
+                  color: "#2f3f33",
+                  lineHeight: 1.55,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 8,
+                }}
+              >
+                {plan.bullets.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
