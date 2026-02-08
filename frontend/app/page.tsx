@@ -574,7 +574,7 @@ export default function Page() {
             },
             {
               name: "Team Tier",
-              price: "$59 per user/month",
+              price: "$19 per user/month",
               detail: "Unlimited projects/jobs",
               bullets: [
     
