@@ -21,5 +21,6 @@ yarn-error.log*
 .idea/
 .vscode/
 
-# Setup
+# Scripts
 init.py
+dump_context.py
